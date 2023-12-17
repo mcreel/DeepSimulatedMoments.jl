@@ -1,8 +1,9 @@
+using Distributions, Statistics
 # Compute simulated moments
 function simmoments(
     mn::MomentNetwork, dgp::AbstractDGP{T}, S::Int, θ::AbstractVector{T}
 ) where {T<:AbstractFloat}
-    X, _ = generate(θ, dgp, S, mn)
+    X, _ = generate(θ, dgp, mn, S)
     vec(mean(make_moments(mn, X), dims=2))
 end
 
@@ -19,5 +20,5 @@ end
 function proposal(
     x::AbstractVector{T}, δ::T, Σ::AbstractMatrix{T}
 ) where {T<:AbstractFloat}
-    x + δ * Σ * randn(T, size(x))
+rand(MvNormal(x, δ * Σ))
 end

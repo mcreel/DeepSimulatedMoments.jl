@@ -26,8 +26,9 @@ include("NeuralNets/tcn_utils.jl")
 include("NeuralNets/HyperParameters.jl")
 include("NeuralNets/MomentNetwork.jl")
 
-# include("MSM/utils.jl")
-# include("MSM/BMSM.jl")
-# include("MSM/MSM.jl")
+include("MSM/utils.jl")
+include("MSM/BMSM.jl")
+include("MSM/mcmc.jl")
 
+export mcmc, simmomentscov
 end
