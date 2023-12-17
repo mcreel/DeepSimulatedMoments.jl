@@ -1,6 +1,7 @@
 # TODO: prior? not needed at present, as priors are uniform
 @views function mcmc(
-    θstart,
+    θ, # start value
+    θ⁺, # the NN fitted value
     δ, # tuning
     Σₚ, # proposal covariance
     S,  # simulations per evaluation of likelihood
@@ -11,16 +12,16 @@
     verbosity::Int=10
 )
     # set likelihood and proposal
-    Lₙ = θ -> bmsm_obj_cue(θ, θ⁺, mn, dgp, S) 
-    proposal = θ -> proposal(θ, δ, Σₚ)
+    Lₙ = θ -> msm_obj(θ, θ⁺, mn, dgp, S) 
+    proposal2 = θ -> proposal(θ, Float32(δ), Σₚ)
 
-    Lₙθ = Lₙ(θstart) # Objective at data moments value
+    Lₙθ = Lₙ(θ)
     naccept = 0 # Number of acceptance / rejections
     accept = false
     acceptance_rate = 1f0
-    chain = zeros(chainlength, size(θstart, 1) + 2)
+    chain = zeros(chainlength, size(θ, 1) + 2)
     for i ∈ 1:burnin+chainlength
-        θᵗ = proposal(θ) # new trial value
+        θᵗ = proposal2(θ) # new trial value
         Lₙθᵗ = Lₙ(θᵗ) # Objective at trial value
         # Accept / reject trial value
         accept = rand() < exp(Lₙθᵗ - Lₙθ)

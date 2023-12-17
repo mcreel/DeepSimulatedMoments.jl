@@ -3,16 +3,16 @@ using Distributions, Statistics
 function simmoments(
     mn::MomentNetwork, dgp::AbstractDGP{T}, S::Int, θ::AbstractVector{T}
 ) where {T<:AbstractFloat}
-    X, _ = generate(θ, dgp, mn, S)
-    vec(mean(make_moments(mn, X), dims=2))
+    X, _ = generate(θ, dgp, S)
+    vec(mean(make_moments(mn, mn.data_transform(X)), dims=2))
 end
 
 # Compute simulated moments and their covariance matrix
 function simmomentscov(
     mn::MomentNetwork, dgp::AbstractDGP{T}, S::Int, θ::AbstractVector{T}
 ) where {T<:AbstractFloat}
-    X, _ = generate(θ, dgp, S, mn)
-    m = make_moments(mn, X)
+    X = generate(θ, dgp, S)
+    m = make_moments(mn, mn.data_transform(X))
     mean(m, dims=2), cov(permutedims(m))
 end
 
