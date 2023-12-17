@@ -1,6 +1,5 @@
 module DeepSimulatedMoments
 
-using DifferentialEquations
 using Distributions
 using LinearAlgebra
 using Flux
@@ -8,6 +7,7 @@ using JLD2
 using Optim
 using Printf
 using Random
+using Statistics
 using StatsBase
 using UnPack
 
